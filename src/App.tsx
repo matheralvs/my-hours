@@ -1,53 +1,19 @@
 import { Timer } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable"
-import {
-  Tooltip,
-  TooltipArrow,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { RegisterHoursDrawer } from "./components/register-hours-drawer"
 
-function App() {
+export function App() {
   return (
-    <main className="h-screen">
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel
-          defaultSize={20}
-          minSize={0}
-          maxSize={20}
-          className="p-4"
-        >
-          Logo
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel className="p-4">Conteúdo principal</ResizablePanel>
-      </ResizablePanelGroup>
+    <main className="flex h-screen items-center justify-center">
+      <div className="flex flex-col items-center justify-center gap-4">
+        <Timer className="size-16 text-foreground" />
+        <h1 className="w-[250px] text-center text-xl font-medium text-foreground">
+          Está em dúvidas sobre seu tempo de trabalho?{" "}
+          <span className="font-bold text-primary">Calcule agora.</span>
+        </h1>
+      </div>
 
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="icon"
-              className="absolute bottom-6 right-6 rounded-full shadow-lg"
-            >
-              <Timer className="size-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="left">
-            Adicionar horas
-            <TooltipArrow className="fill-background stroke-gray-400" />
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <RegisterHoursDrawer />
     </main>
   )
 }
-
-export default App
