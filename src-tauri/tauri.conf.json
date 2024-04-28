@@ -20,7 +20,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.my-hours",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -36,12 +36,12 @@
       {
         "fullscreen": false,
         "resizable": false,
+        "decorations": true,
         "title": "My Hours",
         "width": 400,
         "height": 600,
         "visible": false,
-        "center": true,
-        "decorations": false
+        "center": true
       }
     ],
     "systemTray": {

@@ -7,6 +7,7 @@ import { FormData } from "@/validations/types"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,22 +15,44 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-export function RegisterHoursForm() {
+import { useRegisterHours } from "@/contexts/register-hours-context"
+
+import { timeToMs } from "@/utils"
+
+interface RegisterHoursFormProps {
+  handleShowDrawer: () => void
+}
+
+export function RegisterHoursForm({
+  handleShowDrawer,
+}: RegisterHoursFormProps) {
   const [hasInterval, setHasInterval] = useState(false)
+  const { setRegisterHours } = useRegisterHours()
 
   const form = useFormContext<FormData>()
 
   function onSubmit(data: FormData) {
-    try {
-      console.log(data)
-    } catch (error) {
-      console.log(error)
+    const { entry, exit, interval } = data
+
+    const entryParsedToMs = timeToMs(entry)
+    const exitParsedToMs = timeToMs(exit)
+    const intervalParsedToMs = interval ? timeToMs(interval) : 0
+
+    let amount = exitParsedToMs - entryParsedToMs
+
+    if (interval) {
+      amount = amount - intervalParsedToMs
     }
+
+    setRegisterHours(amount)
+
+    form.reset()
+    handleShowDrawer()
   }
 
   return (
     <form
-      id="form"
+      id="register-hours-form"
       className="mt-2 flex flex-col gap-y-4 px-4"
       onSubmit={form.handleSubmit(onSubmit)}
     >
@@ -41,7 +64,7 @@ export function RegisterHoursForm() {
             <FormItem>
               <FormLabel htmlFor="entry">Entrada</FormLabel>
               <FormControl>
-                <Input id="entry" type="time" {...field} />
+                <Input {...field} id="entry" type="time" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -57,7 +80,7 @@ export function RegisterHoursForm() {
             <FormItem>
               <FormLabel htmlFor="exit">Saída</FormLabel>
               <FormControl>
-                <Input id="exit" type="time" {...field} />
+                <Input {...field} id="exit" type="time" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,10 +95,14 @@ export function RegisterHoursForm() {
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel htmlFor="interval">Saída</FormLabel>
+                <FormLabel htmlFor="interval">Intervalo</FormLabel>
                 <FormControl>
-                  <Input id="interval" type="time" {...field} />
+                  <Input {...field} id="interval" type="time" />
                 </FormControl>
+
+                <FormDescription className="text-xs">
+                  Ex.: Intervalo de almoço, pausas e etc.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )

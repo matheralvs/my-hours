@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -25,6 +27,8 @@ import {
 } from "@/components/ui/tooltip"
 
 export function RegisterHoursDrawer() {
+  const [open, setOpen] = useState(false)
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,8 +38,13 @@ export function RegisterHoursDrawer() {
     },
   })
 
+  function handleShowDrawer() {
+    setOpen((prevState) => !prevState)
+    form.reset()
+  }
+
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <TooltipProvider delayDuration={0}>
         <Tooltip>
           <DrawerTrigger asChild>
@@ -43,6 +52,7 @@ export function RegisterHoursDrawer() {
               <Button
                 size="icon"
                 className="absolute bottom-6 right-6 size-12 rounded-full shadow-xl"
+                onClick={handleShowDrawer}
               >
                 <Plus className="size-5" />
               </Button>
@@ -61,10 +71,10 @@ export function RegisterHoursDrawer() {
           </DrawerDescription>
         </DrawerHeader>
         <Form {...form}>
-          <RegisterHoursForm />
+          <RegisterHoursForm handleShowDrawer={handleShowDrawer} />
         </Form>
         <DrawerFooter className="sm:justify-start">
-          <Button type="submit" form="form">
+          <Button type="submit" form="register-hours-form">
             Calcular
           </Button>
         </DrawerFooter>
